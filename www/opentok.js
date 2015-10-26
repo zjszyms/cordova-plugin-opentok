@@ -163,19 +163,21 @@ var TBError, TBGenerateDomHelper, TBGetScreenRatios, TBGetZIndex, TBSuccess, TBU
 streamElements = {};
 
 getPosition = function(divName) {
-  var computedStyle, curleft, curtop, height, marginBottom, marginLeft, marginRight, marginTop, pubDiv, width;
+  var computedStyle, curleft, curtop, height, marginBottom, marginLeft, marginRight, marginTop, pubDiv, width, transform;
   pubDiv = document.getElementById(divName);
   if (!pubDiv) {
     return {};
   }
   computedStyle = window.getComputedStyle ? getComputedStyle(pubDiv, null) : {};
+  transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform);
   width = pubDiv.offsetWidth;
   height = pubDiv.offsetHeight;
-  curtop = pubDiv.offsetTop;
-  curleft = pubDiv.offsetLeft;
+  curtop = pubDiv.offsetTop + transform.m41;
+  curleft = pubDiv.offsetLeft + transform.m42;
   while ((pubDiv = pubDiv.offsetParent)) {
-    curleft += pubDiv.offsetLeft;
-    curtop += pubDiv.offsetTop;
+    transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform);
+    curleft += pubDiv.offsetLeft + transform.m41;
+    curtop += pubDiv.offsetTop + transform.m42;
   }
   marginTop = parseInt(computedStyle.marginTop) || 0;
   marginBottom = parseInt(computedStyle.marginBottom) || 0;
