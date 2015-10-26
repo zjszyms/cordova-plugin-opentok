@@ -158,12 +158,12 @@ TBEvent = (function() {
 
 })();
 
-var TBError, TBGenerateDomHelper, TBGetScreenRatios, TBGetZIndex, TBSuccess, TBUpdateObjects, getPosition, pdebug, replaceWithVideoStream, streamElements;
+var TBError, TBGenerateDomHelper, TBGetBorderRadius, TBGetScreenRatios, TBGetZIndex, TBSuccess, TBUpdateObjects, getPosition, pdebug, replaceWithVideoStream, streamElements;
 
 streamElements = {};
 
 getPosition = function(divName) {
-  var computedStyle, curleft, curtop, height, marginBottom, marginLeft, marginRight, marginTop, pubDiv, width, transform;
+  var computedStyle, curleft, curtop, height, marginBottom, marginLeft, marginRight, marginTop, pubDiv, transform, width;
   pubDiv = document.getElementById(divName);
   if (!pubDiv) {
     return {};
@@ -236,7 +236,7 @@ TBUpdateObjects = function() {
     console.log("JS sessionId: " + streamId);
     id = e.id;
     position = getPosition(id);
-    Cordova.exec(TBSuccess, TBError, OTPlugin, "updateView", [streamId, position.top, position.left, position.width, position.height, TBGetZIndex(e), ratios.widthRatio, ratios.heightRatio]);
+    Cordova.exec(TBSuccess, TBError, OTPlugin, "updateView", [streamId, position.top, position.left, position.width, position.height, TBGetZIndex(e), ratios.widthRatio, ratios.heightRatio, TBGetBorderRadius(e)]);
   }
 };
 
@@ -268,6 +268,23 @@ TBGetScreenRatios = function() {
     heightRatio: window.outerHeight / window.innerHeight
   };
 };
+
+TBGetBorderRadius = function(ele) {
+  var val;
+  while ((ele != null)) {
+    val = document.defaultView.getComputedStyle(ele, null).getPropertyValue('border-radius');
+    if (val && (val.length > 1) && (val !== '0px')) {
+      if (val.indexOf('%') === (val.length - 1)) {
+        return Math.round(ele.offsetWidth * (parseFloat(val.substring(0, val.length - 1)) / 100));
+      } else if (val.indexOf('px') === (val.length - 2)) {
+        return parseInt(val.substring(0, val.length - 2));
+      }
+    }
+    ele = ele.offsetParent;
+  }
+};
+
+return 0;
 
 pdebug = function(msg, data) {
   return console.log("JS Lib: " + msg + " - ", data);
@@ -603,7 +620,7 @@ TBSession = (function() {
     element = streamElements[elementId];
     if (element) {
       element.parentNode.removeChild(element);
-      delete streamElements[elementId];
+      delete streamElements[streamId];
       TBUpdateObjects();
     }
     return Cordova.exec(TBSuccess, TBError, OTPlugin, "unsubscribe", [subscriber.streamId]);
