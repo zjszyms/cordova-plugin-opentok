@@ -282,9 +282,8 @@ TBGetBorderRadius = function(ele) {
     }
     ele = ele.offsetParent;
   }
+  return 0;
 };
-
-return 0;
 
 pdebug = function(msg, data) {
   return console.log("JS Lib: " + msg + " - ", data);
@@ -300,7 +299,7 @@ TBPublisher = (function() {
     this.streamCreated = __bind(this.streamCreated, this);
     this.eventReceived = __bind(this.eventReceived, this);
     this.setSession = __bind(this.setSession, this);
-    var cameraName, height, name, position, publishAudio, publishVideo, ratios, width, zIndex, _ref, _ref1, _ref2, _ref3;
+    var borderRadius, cameraName, height, name, position, publishAudio, publishVideo, ratios, width, zIndex, _ref, _ref1, _ref2, _ref3;
     this.sanitizeInputs(one, two, three);
     pdebug("creating publisher", {});
     position = getPosition(this.domId);
@@ -310,6 +309,7 @@ TBPublisher = (function() {
     cameraName = "front";
     zIndex = TBGetZIndex(document.getElementById(this.domId));
     ratios = TBGetScreenRatios();
+    borderRadius = TBGetBorderRadius(document.getElementById(this.domId));
     if (this.properties != null) {
       width = (_ref = this.properties.width) != null ? _ref : position.width;
       height = (_ref1 = this.properties.height) != null ? _ref1 : position.height;
@@ -334,7 +334,7 @@ TBPublisher = (function() {
     position = getPosition(this.domId);
     TBUpdateObjects();
     OT.getHelper().eventing(this);
-    Cordova.exec(TBSuccess, TBError, OTPlugin, "initPublisher", [name, position.top, position.left, width, height, zIndex, publishAudio, publishVideo, cameraName, ratios.widthRatio, ratios.heightRatio]);
+    Cordova.exec(TBSuccess, TBError, OTPlugin, "initPublisher", [name, position.top, position.left, width, height, zIndex, publishAudio, publishVideo, cameraName, ratios.widthRatio, ratios.heightRatio, borderRadius]);
     Cordova.exec(this.eventReceived, TBSuccess, OTPlugin, "addEvent", ["publisherEvents"]);
   }
 
@@ -846,7 +846,7 @@ TBSubscriber = (function() {
   };
 
   function TBSubscriber(stream, divName, properties) {
-    var divPosition, element, height, name, obj, position, ratios, subscribeToAudio, subscribeToVideo, width, zIndex, _ref;
+    var borderRadius, divPosition, element, height, name, obj, position, ratios, subscribeToAudio, subscribeToVideo, width, zIndex, _ref;
     element = document.getElementById(divName);
     pdebug("creating subscriber", properties);
     this.streamId = stream.streamId;
@@ -882,8 +882,9 @@ TBSubscriber = (function() {
     });
     position = getPosition(obj.id);
     ratios = TBGetScreenRatios();
+    borderRadius = TBGetBorderRadius(element);
     pdebug("final subscriber position", position);
-    Cordova.exec(TBSuccess, TBError, OTPlugin, "subscribe", [stream.streamId, position.top, position.left, width, height, zIndex, subscribeToAudio, subscribeToVideo, ratios.widthRatio, ratios.heightRatio]);
+    Cordova.exec(TBSuccess, TBError, OTPlugin, "subscribe", [stream.streamId, position.top, position.left, width, height, zIndex, subscribeToAudio, subscribeToVideo, ratios.widthRatio, ratios.heightRatio, borderRadius]);
   }
 
   TBSubscriber.prototype.removeEventListener = function(event, listener) {

@@ -103,7 +103,7 @@ TBGetScreenRatios = ()->
     }
 
 TBGetBorderRadius = (ele) ->
-   while( ele? )
+  while( ele? )
     val = document.defaultView.getComputedStyle(ele,null).getPropertyValue('border-radius')
     if (val && (val.length > 1) && (val != '0px'))
       if (val.indexOf('%') == (val.length - 1))
