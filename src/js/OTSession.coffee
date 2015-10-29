@@ -67,7 +67,8 @@ class TBSession
     @subscriberCallbacks = {}
     if( four? )
       # stream,domId, properties, completionHandler
-      subscriber = new TBSubscriber(one, two, three)
+      domId = two || TBGenerateDomHelper()
+      subscriber = new TBSubscriber(one, domId, three)
       @subscriberCallbacks[one.streamId] = four
       return subscriber
     if( three? )

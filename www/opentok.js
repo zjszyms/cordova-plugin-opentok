@@ -553,7 +553,8 @@ TBSession = (function() {
     var domId, subscriber;
     this.subscriberCallbacks = {};
     if ((four != null)) {
-      subscriber = new TBSubscriber(one, two, three);
+      domId = two || TBGenerateDomHelper();
+      subscriber = new TBSubscriber(one, domId, three);
       this.subscriberCallbacks[one.streamId] = four;
       return subscriber;
     }
@@ -848,6 +849,8 @@ TBSubscriber = (function() {
   function TBSubscriber(stream, divName, properties) {
     var borderRadius, divPosition, element, height, name, obj, position, ratios, subscribeToAudio, subscribeToVideo, width, zIndex, _ref;
     element = document.getElementById(divName);
+    this.id = divName;
+    this.element = element;
     pdebug("creating subscriber", properties);
     this.streamId = stream.streamId;
     if ((properties != null) && properties.width === "100%" && properties.height === "100%") {
