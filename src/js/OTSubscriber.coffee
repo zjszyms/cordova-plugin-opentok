@@ -2,6 +2,7 @@
 #   Properties:
 #     id (string) - dom id of the subscriber
 #     stream (Stream) - stream to which you are subscribing
+#     element (Element) - HTML DOM element containing the Subscriber
 #   Methods: 
 #     getAudioVolume()
 #     getImgData() : String
@@ -35,6 +36,8 @@ class TBSubscriber
 
   constructor: (stream, divName, properties) ->
     element = document.getElementById(divName)
+    @id = divName
+    @element = element
     pdebug "creating subscriber", properties
     @streamId = stream.streamId
     if(properties? && properties.width=="100%" && properties.height == "100%")
