@@ -613,18 +613,17 @@ TBSession = (function() {
   };
 
   TBSession.prototype.unsubscribe = function(subscriber) {
-    var element, elementId;
+    var element, streamId;
     console.log("JS: Unsubscribe");
-    elementId = subscriber.streamId;
-    element = document.getElementById("TBStreamConnection" + elementId);
+    streamId = subscriber.streamId;
+    element = subscriber.element || document.getElementById("TBStreamConnection" + streamId);
     console.log("JS: Unsubscribing");
-    element = streamElements[elementId];
     if (element) {
       element.parentNode.removeChild(element);
       delete streamElements[streamId];
       TBUpdateObjects();
     }
-    return Cordova.exec(TBSuccess, TBError, OTPlugin, "unsubscribe", [subscriber.streamId]);
+    return Cordova.exec(TBSuccess, TBError, OTPlugin, "unsubscribe", [streamId]);
   };
 
   function TBSession(apiKey, sessionId) {
