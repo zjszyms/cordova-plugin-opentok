@@ -606,7 +606,9 @@ TBSession = (function() {
     console.log("JS: Unpublish");
     element = document.getElementById(this.publisher.domId);
     if (element) {
-      element.parentNode.removeChild(element);
+      if (element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
       TBUpdateObjects();
     }
     return Cordova.exec(TBSuccess, TBError, OTPlugin, "unpublish", []);
@@ -619,7 +621,9 @@ TBSession = (function() {
     element = subscriber.element || document.getElementById("TBStreamConnection" + streamId);
     console.log("JS: Unsubscribing");
     if (element) {
-      element.parentNode.removeChild(element);
+      if (element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
       delete streamElements[streamId];
       TBUpdateObjects();
     }
@@ -736,7 +740,9 @@ TBSession = (function() {
     if (stream) {
       element = streamElements[stream.streamId];
       if (element) {
-        element.parentNode.removeChild(element);
+        if (element.parentNode) {
+          element.parentNode.removeChild(element);
+        }
         delete streamElements[stream.streamId];
         TBUpdateObjects();
       }
