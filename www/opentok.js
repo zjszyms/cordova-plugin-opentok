@@ -220,20 +220,15 @@ TBError = function(error) {
   return navigator.notification.alert(error);
 };
 
-TBSuccess = function() {
-  return console.log("success");
-};
+TBSuccess = function() {};
 
 TBUpdateObjects = function() {
   var e, id, objects, position, ratios, streamId, _i, _len;
-  console.log("JS: Objects being updated in TBUpdateObjects");
   objects = document.getElementsByClassName('OT_root');
   ratios = TBGetScreenRatios();
   for (_i = 0, _len = objects.length; _i < _len; _i++) {
     e = objects[_i];
-    console.log("JS: Object updated");
     streamId = e.dataset.streamid;
-    console.log("JS sessionId: " + streamId);
     id = e.id;
     position = getPosition(id);
     Cordova.exec(TBSuccess, TBError, OTPlugin, "updateView", [streamId, position.top, position.left, position.width, position.height, TBGetZIndex(e), ratios.widthRatio, ratios.heightRatio, TBGetBorderRadius(e)]);
@@ -253,7 +248,6 @@ TBGetZIndex = function(ele) {
   var val;
   while ((ele != null)) {
     val = document.defaultView.getComputedStyle(ele, null).getPropertyValue('z-index');
-    console.log(val);
     if (parseInt(val)) {
       return val;
     }

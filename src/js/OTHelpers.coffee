@@ -63,18 +63,18 @@ TBError = (error) ->
   navigator.notification.alert(error)
 
 TBSuccess = ->
-  console.log("success")
+  # console.log("success")
 
 TBUpdateObjects = ()->
-  console.log("JS: Objects being updated in TBUpdateObjects")
+  # console.log("JS: Objects being updated in TBUpdateObjects")
   objects = document.getElementsByClassName('OT_root')
 
   ratios = TBGetScreenRatios()
 
   for e in objects
-    console.log("JS: Object updated")
+    # console.log("JS: Object updated")
     streamId = e.dataset.streamid
-    console.log("JS sessionId: " + streamId )
+    # console.log("JS sessionId: " + streamId )
     id = e.id
     position = getPosition(id)
     Cordova.exec(TBSuccess, TBError, OTPlugin, "updateView", [streamId, position.top, position.left, position.width, position.height, TBGetZIndex(e), ratios.widthRatio, ratios.heightRatio, TBGetBorderRadius(e)] )
@@ -89,7 +89,7 @@ TBGenerateDomHelper = ->
 TBGetZIndex = (ele) ->
   while( ele? )
     val = document.defaultView.getComputedStyle(ele,null).getPropertyValue('z-index')
-    console.log val
+    # console.log val
     if ( parseInt(val) )
       return val
     ele = ele.offsetParent
