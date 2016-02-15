@@ -12,13 +12,13 @@ getPosition = (divName) ->
   pubDiv = document.getElementById(divName)
   if !pubDiv then return {}
   computedStyle = if window.getComputedStyle then getComputedStyle(pubDiv, null) else {}
-  transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform)
+  transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform || '')
   width = pubDiv.offsetWidth
   height = pubDiv.offsetHeight
   curtop = pubDiv.offsetTop + transform.m41;
   curleft = pubDiv.offsetLeft + transform.m42;
   while(pubDiv = pubDiv.offsetParent)
-    transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform)
+    transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform || '')
     curleft += pubDiv.offsetLeft + transform.m41
     curtop += pubDiv.offsetTop + transform.m42
   marginTop = parseInt(computedStyle.marginTop) || 0

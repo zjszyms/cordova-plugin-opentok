@@ -169,13 +169,13 @@ getPosition = function(divName) {
     return {};
   }
   computedStyle = window.getComputedStyle ? getComputedStyle(pubDiv, null) : {};
-  transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform);
+  transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform || '');
   width = pubDiv.offsetWidth;
   height = pubDiv.offsetHeight;
   curtop = pubDiv.offsetTop + transform.m41;
   curleft = pubDiv.offsetLeft + transform.m42;
   while ((pubDiv = pubDiv.offsetParent)) {
-    transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform);
+    transform = new WebKitCSSMatrix(window.getComputedStyle(pubDiv).transform || '');
     curleft += pubDiv.offsetLeft + transform.m41;
     curtop += pubDiv.offsetTop + transform.m42;
   }
