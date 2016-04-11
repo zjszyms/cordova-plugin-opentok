@@ -191,7 +191,7 @@
     if ([subscribeToAudio isEqualToString:@"false"]) {
         subAudio = NO;
     }
-    [_publisher setPublishAudio:subAudio];
+    [_subscriber setSubscribeToAudio:subAudio];
 }
 
 #pragma mark Session Methods
