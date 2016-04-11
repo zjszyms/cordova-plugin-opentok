@@ -29,8 +29,8 @@ class TBSubscriber
     return @
   setStyle: (style, value) ->
     return @
-  subscribeToAudio: (value) ->
-    @subscribeMedia( "subscribeToAudio", value)
+  subscribeAudio: (value) ->
+    @subscribeMedia( "subscribeAudio", value)
     return @
   subscribeToVideo: (value) ->
     return @
@@ -74,11 +74,11 @@ class TBSubscriber
     return @
 
   subscribeMedia:(media, value) ->
-    if media not in ["subscribeToAudio", "subscribeToVideo"] then return
+    if media not in ["subscribeAudio", "subscribeVideo"] then return
     subscribeState = "true"
     if state? and ( state == false or state == "false" )
-    subscribeState = "false"
-
+      subscribeState = "false"
+    pdebug "setting subscribestate", {media: media, subscribeState: subscribeState}
     Cordova.exec(TBSuccess, TBError, OTPlugin, media, [subscribeState] )
 
 
