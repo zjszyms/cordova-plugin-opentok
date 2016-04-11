@@ -14,10 +14,10 @@
 #     subscribeToAudio( value ) : subscriber
 #     subscribeToVideo( value ) : subscriber
 class TBSubscriber
-  getAudioVolume: ->
-    return 0
-  getImgData: ->
-    return ""
+#  getAudioVolume: ->
+#    return 0
+#  getImgData: ->
+#    return ""
   getStyle: ->
     return {}
   off: (event, handler) ->
@@ -29,8 +29,8 @@ class TBSubscriber
     return @
   setStyle: (style, value) ->
     return @
-  subscribeAudio: (value) ->
-    @subscribeMedia( "subscribeAudio", value)
+  subscribeAudio: (state) ->
+    @subscribeMedia( "subscribeAudio", state)
     return @
   subscribeToVideo: (value) ->
     return @
@@ -73,8 +73,8 @@ class TBSubscriber
   removeEventListener: (event, listener) ->
     return @
 
-  subscribeMedia:(media, value) ->
-    if media not in ["subscribeAudio", "subscribeVideo"] then return
+  subscribeMedia:(media, state) ->
+#   if media not in ["subscribeAudio", "subscribeVideo"] then return
     subscribeState = "true"
     if state? and ( state == false or state == "false" )
       subscribeState = "false"
