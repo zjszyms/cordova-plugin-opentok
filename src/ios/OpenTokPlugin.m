@@ -182,6 +182,17 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+// subscribe
+- (void)subscribeToAudio:(CDVInvokedUrlCommand*)command
+{
+    NSString* subscribeToAudio = [command.arguments objectAtIndex:0];
+    NSLog(@"iOS Altering Audio subscribing state, %@", subscribeToAudio);
+    BOOL subAudio = YES;
+    if ([subscribeToAudio isEqualToString:@"false"]) {
+        subAudio = NO;
+    }
+    [_publisher setPublishAudio:subAudio];
+}
 
 #pragma mark Session Methods
 - (void)connect:(CDVInvokedUrlCommand *)command{

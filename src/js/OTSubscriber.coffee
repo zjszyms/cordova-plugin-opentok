@@ -30,6 +30,7 @@ class TBSubscriber
   setStyle: (style, value) ->
     return @
   subscribeToAudio: (value) ->
+    @subscribeMedia( "subscribeToAudio", value)
     return @
   subscribeToVideo: (value) ->
     return @
@@ -67,6 +68,14 @@ class TBSubscriber
     borderRadius = TBGetBorderRadius(element);
     pdebug "final subscriber position", position
     Cordova.exec(TBSuccess, TBError, OTPlugin, "subscribe", [stream.streamId, position.top, position.left, width, height, zIndex, subscribeToAudio, subscribeToVideo, ratios.widthRatio, ratios.heightRatio, borderRadius] )
+
+    subscribeMedia:(media, value) ->
+        if media not in ["subscribeToAudio", "subscribeToVideo"] then return
+        subscribeState = "true"
+    if state? and ( state == false or state == "false" )
+    subscribeState = "false"
+
+    Cordova.exec(TBSuccess, TBError, OTPlugin, media, [subscribeState] )
 
   # deprecating
   removeEventListener: (event, listener) ->
