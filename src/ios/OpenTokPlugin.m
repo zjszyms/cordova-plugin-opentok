@@ -242,6 +242,7 @@
     // Acquire Stream, then create a subscriber object and put it into dictionary
     OTStream* myStream = [streamDictionary objectForKey:sid];
     OTSubscriber* sub = [[OTSubscriber alloc] initWithStream:myStream delegate:self];
+    _subscriber = sub;
     [_session subscribe:sub error:nil];
     
     if ([[command.arguments objectAtIndex:6] isEqualToString:@"false"]) {
