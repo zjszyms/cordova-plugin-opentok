@@ -183,7 +183,7 @@
 }
 
 // subscribe
-- (void)subscribeAudio:(CDVInvokedUrlCommand*)command;
+- (void)subscribeToAudio:(CDVInvokedUrlCommand*)command;
 {
     NSString* subscribeToAudio = [command.arguments objectAtIndex:0];
     NSLog(@"iOS Altering Audio subscribing state, %@", subscribeToAudio);

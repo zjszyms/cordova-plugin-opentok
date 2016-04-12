@@ -29,8 +29,8 @@ class TBSubscriber
     return @
   setStyle: (style, value) ->
     return @
-  subscribeAudio: (state) ->
-    @subscribeMedia( "subscribeAudio", state)
+  subscribeToAudio: (state) ->
+    @subscribeMedia( "subscribeToAudio", state)
     return @
   subscribeToVideo: (value) ->
     return @
@@ -74,7 +74,7 @@ class TBSubscriber
     return @
 
   subscribeMedia:(media, state) ->
-#   if media not in ["subscribeAudio", "subscribeVideo"] then return
+    if media not in ["subscribeToAudio", "subscribeToVideo"] then return
     subscribeState = "true"
     if state? and ( state == false or state == "false" )
       subscribeState = "false"

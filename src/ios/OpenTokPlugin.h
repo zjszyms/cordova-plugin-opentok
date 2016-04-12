@@ -30,7 +30,7 @@
 - (void)destroyPublisher:(CDVInvokedUrlCommand*)command;
 
 // subscribe
-- (void)subscribeAudio:(CDVInvokedUrlCommand*)command;
+- (void)subscribeToAudio:(CDVInvokedUrlCommand*)command;
 
 // Session
 -(void)connect:(CDVInvokedUrlCommand*)command;

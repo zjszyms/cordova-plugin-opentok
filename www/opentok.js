@@ -829,8 +829,8 @@ TBSubscriber = (function() {
     return this;
   };
 
-  TBSubscriber.prototype.subscribeAudio = function(state) {
-    this.subscribeMedia("subscribeAudio", state);
+  TBSubscriber.prototype.subscribeToAudio = function(state) {
+    this.subscribeMedia("subscribeToAudio", state);
     return this;
   };
 
@@ -888,6 +888,9 @@ TBSubscriber = (function() {
 
   TBSubscriber.prototype.subscribeMedia = function(media, state) {
     var subscribeState;
+    if (media !== "subscribeToAudio" && media !== "subscribeToVideo") {
+      return;
+    }
     subscribeState = "true";
     if ((state != null) && (state === false || state === "false")) {
       subscribeState = "false";
