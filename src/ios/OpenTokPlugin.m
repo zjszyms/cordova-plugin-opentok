@@ -46,6 +46,8 @@
     NSString* apiKey = [command.arguments objectAtIndex:0];
     NSString* sessionId = [command.arguments objectAtIndex:1];
     
+    self.webView.scrollView.bounces = NO;
+    
     // Create Session
     _session = [[OTSession alloc] initWithApiKey: apiKey sessionId:sessionId delegate:self];
     
@@ -88,10 +90,12 @@
     [_publisher setPublishAudio:bpubAudio];
     [_publisher setPublishVideo:bpubVideo];
     [self.webView.superview addSubview:_publisher.view];
+    
     [_publisher.view setFrame:CGRectMake(left, top, width, height)];
     if (zIndex>0) {
         _publisher.view.layer.zPosition = zIndex;
     }
+    
     NSString* cameraPosition = [command.arguments objectAtIndex:8];
     if ([cameraPosition isEqualToString:@"back"]) {
         _publisher.cameraPosition = AVCaptureDevicePositionBack;
@@ -106,36 +110,36 @@
 // Helper function to update Views
 - (void)updateView:(CDVInvokedUrlCommand*)command{
     //NSString* callback = command.callbackId;
-    NSString* sid = [command.arguments objectAtIndex:0];
-    int top = [[command.arguments objectAtIndex:1] intValue];
-    int left = [[command.arguments objectAtIndex:2] intValue];
-    int width = [[command.arguments objectAtIndex:3] intValue];
-    int height = [[command.arguments objectAtIndex:4] intValue];
-    int zIndex = [[command.arguments objectAtIndex:5] intValue];
-    int borderRadius = [[command.arguments objectAtIndex:8] intValue];
-    if ([sid isEqualToString:@"TBPublisher"]) {
-        NSLog(@"The Width is: %d", width);
-        _publisher.view.frame = CGRectMake(left, top, width, height);
-        _publisher.view.layer.zPosition = zIndex;
-        _publisher.view.layer.cornerRadius = borderRadius;
-        _publisher.view.clipsToBounds = borderRadius ? YES : NO;
-    }
-
-    // Pulls the subscriber object from dictionary to prepare it for update
-    OTSubscriber* streamInfo = [subscriberDictionary objectForKey:sid];
-
-    if (streamInfo) {
-        // Reposition the video feeds!
-        streamInfo.view.frame = CGRectMake(left, top, width, height);
-        streamInfo.view.layer.zPosition = zIndex;
-        streamInfo.view.layer.cornerRadius = borderRadius;
-        streamInfo.view.clipsToBounds = borderRadius ? YES : NO;
-    }
-
-    CDVPluginResult* callbackResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [callbackResult setKeepCallbackAsBool:YES];
-    //[self.commandDelegate sendPluginResult:callbackResult toSuccessCallbackString:command.callbackId];
-    [self.commandDelegate sendPluginResult:callbackResult callbackId:command.callbackId];
+//    NSString* sid = [command.arguments objectAtIndex:0];
+//    int top = [[command.arguments objectAtIndex:1] intValue];
+//    int left = [[command.arguments objectAtIndex:2] intValue];
+//    int width = [[command.arguments objectAtIndex:3] intValue];
+//    int height = [[command.arguments objectAtIndex:4] intValue];
+//    int zIndex = [[command.arguments objectAtIndex:5] intValue];
+//    int borderRadius = [[command.arguments objectAtIndex:8] intValue];
+//    if ([sid isEqualToString:@"TBPublisher"]) {
+//        NSLog(@"The Width is: %d", width);
+//        _publisher.view.frame = CGRectMake(left, top, width, height);
+//        _publisher.view.layer.zPosition = zIndex;
+//        _publisher.view.layer.cornerRadius = borderRadius;
+//        _publisher.view.clipsToBounds = borderRadius ? YES : NO;
+//    }
+//
+//    // Pulls the subscriber object from dictionary to prepare it for update
+//    OTSubscriber* streamInfo = [subscriberDictionary objectForKey:sid];
+//
+//    if (streamInfo) {
+//        // Reposition the video feeds!
+//        streamInfo.view.frame = CGRectMake(left, top, width, height);
+//        streamInfo.view.layer.zPosition = zIndex;
+//        streamInfo.view.layer.cornerRadius = borderRadius;
+//        streamInfo.view.clipsToBounds = borderRadius ? YES : NO;
+//    }
+//
+//    CDVPluginResult* callbackResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+//    [callbackResult setKeepCallbackAsBool:YES];
+//    //[self.commandDelegate sendPluginResult:callbackResult toSuccessCallbackString:command.callbackId];
+//    [self.commandDelegate sendPluginResult:callbackResult callbackId:command.callbackId];
 }
 
 #pragma mark Publisher Methods
@@ -257,6 +261,9 @@
     if (zIndex>0) {
         sub.view.layer.zPosition = zIndex;
     }
+//    sub.view.layer.zPosition = 1;
+//    sub.view.layer.zPosition = -100;
+    sub.view.userInteractionEnabled = NO;
     sub.view.layer.cornerRadius = borderRadius;
     sub.view.clipsToBounds = borderRadius ? YES : NO;
     [self.webView.superview addSubview:sub.view];
