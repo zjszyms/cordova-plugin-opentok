@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,19 +72,45 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
 
 		public void updateZIndices() {
 			allStreamViews = new ArrayList<RunnableUpdateViews>();
+
+			System.out.println("subscriberCollection.size() = " + subscriberCollection.size());
 			for (Map.Entry<String, RunnableSubscriber> entry : subscriberCollection.entrySet()) {
+				System.out.println("entry.getKey() = " + entry.getKey());
 				allStreamViews.add(entry.getValue());
 			}
-			if (myPublisher != null) {
-				allStreamViews.add(myPublisher);
-			}
+//			if (myPublisher != null) {
+//				allStreamViews.add(myPublisher);
+//			}
 			Collections.sort(allStreamViews, new CustomComparator());
+
+//			for (RunnableUpdateViews viewContainer : allStreamViews) {
+//				ViewGroup parent = (ViewGroup) cordova.getActivity().findViewById(android.R.id.content);
+//				if (null != parent) {
+//					parent.removeView(viewContainer.mView);
+//					parent.addView(viewContainer.mView);
+//				}
+//			}
+
+			if (myPublisher != null && myPublisher.mPublisher.getView()!= null) {
+				ViewGroup parent = (ViewGroup) cordova.getActivity().findViewById(android.R.id.content);
+				if (null != parent) {
+					System.out.println(parent.indexOfChild(myPublisher.mPublisher.getView()));
+//					parent.removeView(myPublisher.mPublisher.getView());
+//					parent.addView(myPublisher.mPublisher.getView());
+					publisherContainer.removeView(myPublisher.mPublisher.getView());
+					publisherContainer.addView(myPublisher.mPublisher.getView());
+					System.out.println(parent.indexOfChild(myPublisher.mPublisher.getView()));
+				}
+			}
 
 			for (RunnableUpdateViews viewContainer : allStreamViews) {
 				ViewGroup parent = (ViewGroup) cordova.getActivity().findViewById(android.R.id.content);
 				if (null != parent) {
-					parent.removeView(viewContainer.mView);
-					parent.addView(viewContainer.mView);
+//					parent.removeView(viewContainer.mView);
+//					parent.addView(viewContainer.mView);
+					container.removeView(viewContainer.mView);
+					container.addView(viewContainer.mView);
+					System.out.println(parent.indexOfChild(viewContainer.mView));
 				}
 			}
 		}
@@ -115,14 +142,27 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
 					ratioIndex = 9;
 				}
 
-				widthRatio = (float) mProperty.getDouble(ratioIndex);
-				heightRatio = (float) mProperty.getDouble(ratioIndex + 1);
+//				widthRatio = (float) mProperty.getDouble(ratioIndex);
+//				heightRatio = (float) mProperty.getDouble(ratioIndex + 1);
+				widthRatio = DensityUtil.getDensity(cordova.getActivity());
+				heightRatio = widthRatio;
 
-				mView.setY(mProperty.getInt(1) * heightRatio);
-				mView.setX(mProperty.getInt(2) * widthRatio);
+				Rect frame = new Rect();
+				cordova.getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+				int statusBarHeight = frame.top;
+
+				mView.setY(mProperty.getInt(1) * heightRatio - statusBarHeight);
+				mView.setX(mProperty.getInt(2) * widthRatio - statusBarHeight);
 				ViewGroup.LayoutParams params = mView.getLayoutParams();
 				params.height = (int) (mProperty.getInt(4) * heightRatio);
 				params.width = (int) (mProperty.getInt(3) * widthRatio);
+
+				for (int i=0;i<mProperty.length();i++) {
+					System.out.println(i + "->" + mProperty.get(i));
+				}
+				System.out.println("params.height = " + params.height);
+				System.out.println("params.width = " + params.width);
+
 				mView.setLayoutParams(params);
 				updateZIndices();
 			} catch (Exception e) {
@@ -137,6 +177,7 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
 		public Publisher mPublisher;
 
 		public RunnablePublisher(JSONArray args) {
+			System.out.println(args.toString());
 			this.mProperty = args;
 
 			// prevent dialog box from showing because it causes crash
@@ -191,7 +232,8 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
 					Log.i(TAG, "error when trying to retrieve publish audio/video property");
 				}
 				this.mView = mPublisher.getView();
-				frame.addView(this.mView);
+//				frame.addView(this.mView);
+				publisherContainer.addView(this.mView);
 				mSession.publish(mPublisher);
 			}
 			super.run();
@@ -269,7 +311,9 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
 				mSubscriber.setSubscriberListener(this);
 				ViewGroup frame = (ViewGroup) cordova.getActivity().findViewById(android.R.id.content);
 				this.mView = mSubscriber.getView();
-				frame.addView(this.mView);
+//				frame.addView(this.mView);
+				container.addView(this.mView);
+
 				mSession.subscribe(mSubscriber);
 				Log.i(TAG, "subscriber view is added to parent view!");
 			}
@@ -374,7 +418,7 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		Log.i(TAG, action);
+		Log.i(TAG, "action = " + action);
 		// TB Methods
 		if (action.equals("initPublisher")) {
 			myPublisher = new RunnablePublisher(args);
