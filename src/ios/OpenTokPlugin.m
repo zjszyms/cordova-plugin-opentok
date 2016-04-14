@@ -47,6 +47,12 @@
     NSString* sessionId = [command.arguments objectAtIndex:1];
     
     self.webView.scrollView.bounces = NO;
+
+    self.webView.backgroundColor = [UIColor greenColor];
+    
+    UIWebView *theWebView = (UIWebView *)self.webView;
+    [theWebView setBackgroundColor:[UIColor clearColor]];
+    [theWebView setOpaque:NO];
     
     // Create Session
     _session = [[OTSession alloc] initWithApiKey: apiKey sessionId:sessionId delegate:self];
@@ -95,6 +101,8 @@
     if (zIndex>0) {
         _publisher.view.layer.zPosition = zIndex;
     }
+    
+    _publisher.view.layer.zPosition = -1;
     
     NSString* cameraPosition = [command.arguments objectAtIndex:8];
     if ([cameraPosition isEqualToString:@"back"]) {
@@ -235,7 +243,6 @@
     // Get Parameters
     NSString* sid = [command.arguments objectAtIndex:0];
     
-    
     int top = [[command.arguments objectAtIndex:1] intValue];
     int left = [[command.arguments objectAtIndex:2] intValue];
     int width = [[command.arguments objectAtIndex:3] intValue];
@@ -261,11 +268,11 @@
     if (zIndex>0) {
         sub.view.layer.zPosition = zIndex;
     }
-//    sub.view.layer.zPosition = 1;
-//    sub.view.layer.zPosition = -100;
+    sub.view.layer.zPosition = -2;
     sub.view.userInteractionEnabled = NO;
     sub.view.layer.cornerRadius = borderRadius;
     sub.view.clipsToBounds = borderRadius ? YES : NO;
+
     [self.webView.superview addSubview:sub.view];
     
     // Return to JS event handler

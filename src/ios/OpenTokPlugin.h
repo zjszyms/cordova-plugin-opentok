@@ -19,8 +19,8 @@
 
 // TB
 - (void)initPublisher:(CDVInvokedUrlCommand*)command;
--(void)initSession:(CDVInvokedUrlCommand*)command;
--(void)exceptionHandler:(CDVInvokedUrlCommand*)command;
+- (void)initSession:(CDVInvokedUrlCommand*)command;
+- (void)exceptionHandler:(CDVInvokedUrlCommand*)command;
 - (void)updateView:(CDVInvokedUrlCommand*)command;
 
 // Publisher
