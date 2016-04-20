@@ -240,6 +240,8 @@
 - (void)subscribe:(CDVInvokedUrlCommand*)command{
     NSLog(@"iOS subscribing to stream");
     
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
     // Get Parameters
     NSString* sid = [command.arguments objectAtIndex:0];
     
@@ -298,7 +300,6 @@
     NSLog(@"iOS signaling to connection %@", c);
     [_session signalWithType:[command.arguments objectAtIndex:0] string:[command.arguments objectAtIndex:1] connection:c error:nil];
 }
-
 
 #pragma mark -
 #pragma mark Delegates
