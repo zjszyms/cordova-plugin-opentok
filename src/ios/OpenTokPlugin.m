@@ -92,7 +92,10 @@
     }
     
     // Publish and set View
-    _publisher = [[OTPublisher alloc] initWithDelegate:self name:name];
+    _publisher = [[OTPublisher alloc] initWithDelegate:self
+                                                  name:name
+                                      cameraResolution:OTCameraCaptureResolutionHigh
+                                       cameraFrameRate:OTCameraCaptureFrameRate30FPS];
     [_publisher setPublishAudio:bpubAudio];
     [_publisher setPublishVideo:bpubVideo];
     [self.webView.superview addSubview:_publisher.view];
