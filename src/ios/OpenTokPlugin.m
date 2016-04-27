@@ -114,10 +114,60 @@
     _publisher.view.layer.cornerRadius = borderRadius;
     _publisher.view.clipsToBounds = borderRadius ? YES : NO;
     
+
+    
     // Return to Javascript
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+
+- (BOOL)microphoneAvailable
+{
+    __block BOOL bCanRecord = YES;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
+    {
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+                if (granted) {
+                    bCanRecord = YES;
+                } else {
+                    bCanRecord = NO;
+                }
+            }];
+        }
+    }
+    
+    return bCanRecord;
+}
+
+- (BOOL)frontCameraAvailable
+{
+    return [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
+}
+
+- (void)checkVoicePermission:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    
+    if (![self microphoneAvailable]) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)checkPermissions:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    
+    if (![self microphoneAvailable] || ![self frontCameraAvailable]) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 // Helper function to update Views
 - (void)updateView:(CDVInvokedUrlCommand*)command{
     //NSString* callback = command.callbackId;
@@ -220,6 +270,7 @@
 
 // Called by session.disconnect()
 - (void)disconnect:(CDVInvokedUrlCommand*)command{
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [_session disconnect:nil];
 }
 

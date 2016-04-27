@@ -32,6 +32,9 @@
 // subscribe
 - (void)subscribeToAudio:(CDVInvokedUrlCommand*)command;
 
+- (void)checkVoicePermission:(CDVInvokedUrlCommand*)command;
+- (void)checkPermissions:(CDVInvokedUrlCommand*)command;
+
 // Session
 -(void)connect:(CDVInvokedUrlCommand*)command;
 -(void)disconnect:(CDVInvokedUrlCommand*)command;
