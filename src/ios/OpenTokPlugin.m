@@ -143,7 +143,12 @@
 
 - (BOOL)frontCameraAvailable
 {
-    return [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
+    BOOL available = NO;
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (status == AVAuthorizationStatusAuthorized) {
+        available = YES;
+    }
+    return available;
 }
 
 - (void)checkVoicePermission:(CDVInvokedUrlCommand*)command
