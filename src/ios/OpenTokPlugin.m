@@ -341,6 +341,19 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+#pragma mark - OTSubscriberKitDelegate
+- (void)subscriberVideoDisabled:(OTSubscriberKit*)subscriber
+                         reason:(OTSubscriberVideoEventReason)reason
+{
+    _subscriber.view.hidden = YES;
+}
+
+- (void)subscriberVideoEnabled:(OTSubscriberKit*)subscriber
+                        reason:(OTSubscriberVideoEventReason)reason
+{
+    _subscriber.view.hidden = NO;
+}
+
 // Called by session.unsubscribe(streamId, top, left)
 - (void)unsubscribe:(CDVInvokedUrlCommand*)command{
     NSLog(@"iOS unSubscribing to stream");

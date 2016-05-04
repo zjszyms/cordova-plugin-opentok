@@ -36,8 +36,8 @@
 - (void)checkPermissions:(CDVInvokedUrlCommand*)command;
 
 // Session
--(void)connect:(CDVInvokedUrlCommand*)command;
--(void)disconnect:(CDVInvokedUrlCommand*)command;
+- (void)connect:(CDVInvokedUrlCommand*)command;
+- (void)disconnect:(CDVInvokedUrlCommand*)command;
 - (void)publish:(CDVInvokedUrlCommand*)command;
 - (void)unpublish:(CDVInvokedUrlCommand*)command;
 - (void)subscribe:(CDVInvokedUrlCommand*)command;
